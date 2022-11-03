@@ -19,18 +19,13 @@ int main(int argc, char *argv[]) {
 		args = args + " " + argv[i];
 	}
 
-	char args_s[args.size() + 1];
-	strcpy(args_s, args.c_str());
 	title += argv[1];
-	char title_s[title.size() + 1];
-	strcpy(title_s, title.c_str());
-
-	system(title_s);
+	system(title.c_str());
 	system("clear");
 	cout << "\x1b[0;34m[Running]" << "\x1b[96m node " << argv[1] << "\x1b[0m" << endl << endl;
 
 	auto start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-    int exit_code = system(args_s);
+    int exit_code = system(args.c_str());
 	auto end_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 
 	int total_milliseconds = end_time - start_time;
