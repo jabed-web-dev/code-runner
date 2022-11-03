@@ -1,0 +1,59 @@
+#include <cstring>
+#include <iostream>
+#include <chrono>
+#include <ctime>
+#include <regex>
+#include <stdlib.h>
+
+using namespace std;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::system_clock;
+
+int main(int argc, char *argv[]) {
+	string args = "cd bin && ", build = "g++.exe ", title = "title ";
+	if (argc == 1) {
+		return 0;
+	}
+
+	regex re(".cpp$");
+	string file_exe = regex_replace(argv[1], re, ".exe");
+	regex rp("./|.\\\\");
+	file_exe = regex_replace(file_exe, rp, "");
+	build = build + argv[1]  + " -o bin/" + file_exe;
+
+	args += file_exe;
+	for (int i = 2; i < argc; i++) {
+		args = args + " " + argv[i];
+	}
+
+	title += file_exe;
+	system(title.c_str());
+    system("if not exist bin\\ ( mkdir bin )");
+	system(build.c_str());
+	system("clear");
+	cout << "\x1b[0;34m[Running]" << "\x1b[96m " << file_exe << "\x1b[0m\n" << endl;
+
+	auto start_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+    int exit_code = system(args.c_str());
+	auto end_time = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+
+	int total_milliseconds = end_time - start_time;
+	int ms = total_milliseconds % 1000;
+	int total_seconds = (total_milliseconds - ms) / 1000;
+	int ss = total_seconds % 60;
+	int total_minutes = (total_seconds - ss) / 60;
+	int mm = total_minutes % 60;
+	int hh = (total_minutes - mm) / 60;
+	
+	string execution_time = hh > 0 ? (to_string(hh) + "h:" + to_string(mm) + "m:" + to_string(ss))
+		: mm > 0 ? (to_string(mm) + "m:" + to_string(ss))
+			: to_string(ss);
+	string timelevel = hh > 0 ? "hours" : mm > 0 ? "minutes" : "seconds";
+
+	string exitlevel = exit_code > 0 ? "\x1b[0;31m[Failed]" : "\x1b[0;32m[Done]";
+	cout << endl << exitlevel << "\x1b[96m exited with\x1b[95m code=" << exit_code << "\x1b[96m in \x1b[94m" << execution_time << "." << ms << "s \x1b[96m" << timelevel << "\x1b[0m" << endl;
+	system("if errorlevel 0 pause");
+
+	return 0;
+}
