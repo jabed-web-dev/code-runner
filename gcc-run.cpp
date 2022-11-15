@@ -1,4 +1,4 @@
-#include <cstring>
+#include <string>
 #include <iostream>
 #include <chrono>
 #include <ctime>
