@@ -1,7 +1,6 @@
 use std::env;
 use std::process::Command;
 use std::time::Instant;
-use regex::Regex;
 use std::io::{self, Write};
 
 extern crate winapi;
@@ -99,21 +98,8 @@ fn main() {
     };
 
     let script_args: Vec<&String> = args_iter.collect();
-    
-    // Define a regex to match filenames with any extension
-    let re = Regex::new(r"([\w-]+)\.([a-zA-Z]+)$").unwrap();
 
-    // Assume the first argument is the script file by default
-    let mut filename: &str = script;
-
-    for arg in &script_args {
-        if let Some(captures) = re.captures(arg) {
-            filename = captures.get(0).unwrap().as_str();
-            break;
-        }
-    }
-
-    let title = format!("[Running] {} {}", program, filename);
+    let title = format!("[Running] {}", program);
     set_console_title(&title);
 
     // Clear the terminal before execution

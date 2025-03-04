@@ -8,7 +8,7 @@ uses:\
   Usage: --pause? --clear? \<program> \<script> [arguments...]
 
 test:\
-  $ `run --pause node test/main.js arg1 arg2`\
+  \$ `run --pause node test/main.js arg1 arg2`\
   \# When run build exe from source like C,C++,Rust use with arg '-'\
   $ `run main.exe -`
 
